@@ -1,7 +1,8 @@
 {:min-bb-version "0.4.0"
 
  :tasks
- {make      (shell "bash -c" "docker run --rm -i -w \"/doc\" -v \"$PWD\":/doc texlive/texlive make")
+ {make      (shell "bash -c" "docker run --rm -i -w \"/doc\" -v \"$PWD\":/doc texlive/texlive:TL2023-historic make")
   show      (shell "bash -c" "evince examples/resume.pdf")
   make:show (do (run 'make)
                 (run 'show))}}
+docker pull texlive/texlive
