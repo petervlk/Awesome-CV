@@ -4,5 +4,15 @@
  {make      (shell "bash -c" "docker run --rm -i -w \"/doc\" -v \"$PWD\":/doc texlive/texlive:TL2023-historic make")
   show      (shell "bash -c" "evince examples/resume.pdf")
   make:show (do (run 'make)
-                (run 'show))}}
+                (run 'show))
+  publish   {:doc "Copies CV to target folder"
+             :requires ([babashka.fs :as fs])
+             :task (let [cv-pdf "examples/resume.pdf"
+                         today (str (fs/home) "/Documents/CV/" (java.time.LocalDate/now))]
+                     (if (not (fs/exists? today)) (fs/create-dirs today))
+                     (if (fs/exists? cv-pdf)
+                       (fs/copy cv-pdf
+                                (str today "/cv_peter_vlk.pdf")
+                                {:replace-existing false})))}}}
+
 docker pull texlive/texlive
